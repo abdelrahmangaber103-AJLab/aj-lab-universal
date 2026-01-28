@@ -4,127 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AJ Lab Universal Pro</title>
+    <meta name="mobile-web-app-capable" content="yes">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Nunito:wght@900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ffcc; --bg: #f8f9fa; --dark-card: #1c2128; --text: #333; }
-        body { background-color: var(--bg); font-family: 'Cairo', sans-serif; margin: 0; padding: 0; color: var(--text); }
-        .header { background: linear-gradient(135deg, #1a1a1a, #333); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .logo { font-family: 'Nunito', sans-serif; font-size: 2.2rem; color: var(--primary); margin: 0; }
+        :root { --primary: #00ffcc; --bg: #0d1117; --card: #161b22; --accent: #58a6ff; --text: #c9d1d9; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+        .header { background: linear-gradient(180deg, #1f242c, var(--bg)); padding: 25px; text-align: center; border-bottom: 2px solid var(--primary); }
+        .logo { font-family: 'Nunito', sans-serif; font-size: 2.5rem; color: var(--primary); text-shadow: 0 0 15px var(--primary); margin: 0; }
         
-        /* بانر التشخيص الذكي - فيديو وصوت لايف */
-        .ai-banner { background: white; margin: 15px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 15px; border: 2px solid var(--primary); }
-        .live-status { background: #e0fbf6; color: #00a884; padding: 5px 15px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; align-self: flex-start; }
-        .video-container { width: 100%; height: 200px; background: #000; border-radius: 15px; overflow: hidden; display: none; position: relative; }
-        video { width: 100%; height: 100%; object-fit: cover; }
+        /* بانر الذكاء الاصطناعي لايف */
+        .ai-hub { margin: 15px; background: var(--card); border-radius: 20px; border: 1px solid #30363d; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .status-dot { width: 100%; display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--primary); margin-bottom: 10px; }
+        .dot { width: 10px; height: 10px; background: var(--primary); border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
         
-        /* شبكة الأقسام (50 زرار فني) */
-        .section-title { padding: 0 20px; font-weight: bold; color: #666; font-size: 0.9rem; }
-        .main-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 15px; }
-        .grid-item { background: white; border-radius: 15px; padding: 15px 5px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); cursor: pointer; transition: 0.2s; border: 1px solid #eee; }
-        .grid-item:active { transform: scale(0.9); background: #f0f0f0; }
-        .grid-item .icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
-        .grid-item .label { font-size: 0.7rem; font-weight: bold; line-height: 1.2; display: block; }
+        #video-feed { width: 100%; height: 200px; background: #000; border-radius: 15px; margin-bottom: 15px; display: none; object-fit: cover; }
+        textarea { width: 100%; background: #010409; border: 1px solid #30363d; color: white; border-radius: 12px; padding: 12px; font-family: 'Cairo'; resize: none; box-sizing: border-box; }
+        
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn-main { border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; transition: 0.3s; }
+        .btn-ai { background: var(--primary); color: #0d1117; grid-column: span 3; font-size: 1.1rem; }
+        .btn-tool { background: #21262d; color: white; font-size: 0.9rem; border: 1px solid #30363d; }
 
-        /* منطقة الردود */
-        #aiResponse { margin: 15px; padding: 15px; background: var(--dark-card); color: white; border-radius: 15px; display: none; border-right: 5px solid var(--primary); font-size: 0.9rem; }
-        
-        .controls { display: flex; justify-content: space-around; padding: 10px; }
-        .btn-action { padding: 12px 25px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
-        .btn-ai { background: var(--primary); color: #1a1a1a; width: 80%; margin: 0 auto; display: block; }
+        /* رد الأسطى */
+        #ai-output { margin-top: 20px; padding: 15px; background: #1c2128; border-right: 4px solid var(--primary); border-radius: 8px; display: none; line-height: 1.6; }
+
+        /* الـ 50 زرار الاحترافي */
+        .sections-label { padding: 15px 20px 5px; font-size: 0.9rem; font-weight: bold; color: var(--accent); }
+        .grid-50 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 15px; }
+        .grid-item { background: var(--card); border: 1px solid #30363d; border-radius: 12px; padding: 12px 5px; text-align: center; cursor: pointer; }
+        .grid-item:active { background: var(--primary); color: #000; transform: scale(0.9); }
+        .grid-item span { display: block; font-size: 1.2rem; margin-bottom: 5px; }
+        .grid-item small { font-size: 0.65rem; display: block; font-weight: bold; white-space: nowrap; overflow: hidden; }
+
+        .fab { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: #25d366; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1 class="logo">AJ Lab Universal Pro</h1>
-        <p style="font-size: 0.8rem; margin-top: 5px;">النسخة الفابريكا | أسطى كل الصنعات</p>
+        <h1 class="logo">AJ Lab Universal</h1>
+        <p style="margin:5px 0 0; font-size:0.8rem; opacity:0.8;">النسخة الماستر | أسطى الصنعات</p>
     </div>
 
-    <div class="ai-banner">
-        <div class="live-status">● متصل بالذكاء الاصطناعي لايف</div>
-        <div class="video-container" id="vidBox"><video id="video" autoplay muted></video></div>
-        <textarea id="textInput" placeholder="اكتب العطل أو اضغط ميكروفون.." style="width: 100%; border: none; outline: none; font-family: 'Cairo';"></textarea>
-        <button class="btn-action btn-ai" onclick="askMasterAI()">بدء التشخيص الذكي</button>
-        <div class="controls">
-            <button onclick="startCamera()" title="فيديو">📷</button>
-            <button onclick="startVoice()" title="صوت">🎤</button>
-            <button onclick="document.getElementById('fileInput').click()" title="صورة">🖼️</button>
-            <input type="file" id="fileInput" style="display:none" onchange="handleImage(this)">
+    <div class="ai-hub">
+        <div class="status-dot"><div class="dot"></div> متصل بـ AJ Lab AI (Live)</div>
+        <video id="video-feed" autoplay playsinline></video>
+        <textarea id="userInput" rows="3" placeholder="اكتب العطل أو صور باللايف.."></textarea>
+        
+        <div class="action-grid">
+            <button class="btn-main btn-ai" onclick="askExpert()">تشخيص العطل فوراً</button>
+            <button class="btn-main btn-tool" onclick="startCam()">🎥 فيديو</button>
+            <button class="btn-main btn-tool" onclick="startMic()">🎤 صوت</button>
+            <button class="btn-main btn-tool" onclick="document.getElementById('imgIn').click()">🖼️ صورة</button>
+            <input type="file" id="imgIn" hidden onchange="processImg()">
         </div>
+
+        <div id="ai-output"></div>
     </div>
 
-    <div id="aiResponse"></div>
+    <div class="sections-label">أقسام الصيانة الذكية</div>
+    <div class="grid-50" id="masterGrid"></div>
 
-    <p class="section-title">أقسام الصيانة والإصلاح</p>
-    <div class="main-grid" id="grid50"></div>
+    <a href="https://wa.me/201011111111" class="fab">💬</a>
 
     <script>
-        const API_KEY = "AIzaSyDSEanlwCKhNGvp4zwGksuk5Vgr_qMZ0TM";
-        const categories = [
-            {n:"موتور بولسار", i:"🏍️"}, {n:"بوكسر 150", i:"⚙️"}, {n:"كهرباء صيني", i:"⚡"}, {n:"تيل فرامل", i:"🛑"},
-            {n:"مكنة هايدلبيرج", i:"📠"}, {n:"خبايا الأوفست", i:"🎨"}, {n:"كهرباء المكن", i:"🔌"}, {n:"ميكانيكا الطباعة", i:"🛠️"},
-            {n:"غسالة توشيبا", i:"🧺"}, {n:"سخان غاز", i:"🔥"}, {n:"ثلاجة نوفروست", i:"❄️"}, {n:"تكييف سبليت", i:"🌬️"},
-            {n:"سيستم POS", i:"📊"}, {n:"إدارة مخازن", i:"📦"}, {n:"قارئ باركود", i:"🏷️"}, {n:"ميزان ذكي", i:"⚖️"},
-            {n:"تجهيز صيانة", i:"🧰"}, {n:"عدة مطلوبة", i:"🔧"}, {n:"حلول سريعة", i:"💡"}, {n:"فيديو شرح", i:"🎥"},
-            {n:"دبرياج هندي", i:"⛓️"}, {n:"كربراتير", i:"⛽"}, {n:"عمرة موتور", i:"🔩"}, {n:"تغيير زيت", i:"🛢️"},
-            {n:"غسالة أطباق", i:"🍽️"}, {n:"مكواة بخار", i:"💨"}, {n:"خلاط فريش", i:"🌪️"}, {n:"ميكروويف", i:"🍱"},
-            {n:"مكنة حلاقة", i:"✂️"}, {n:"راوتر نت", i:"🌐"}, {n:"شاشة LED", i:"📺"}, {n:"ريسيفر", i:"📡"},
-            {n:"كمبروسر", i:"💨"}, {n:"مروحة سقف", i:"🌀"}, {n:"شفاط مطبخ", i:"🏠"}, {n:"مكنة خياطة", i:"🧵"},
-            {n:"طلمبة مياه", i:"💧"}, {n:"بطارية موتوسيكل", i:"🔋"}, {n:"بوجيهات", i:"🕯️"}, {n:"مساعدين", i:"🪜"},
-            {n:"طابعة ليزر", i:"🖨️"}, {n:"حبارة ألوان", i:"🌈"}, {n:"درام المكنة", i:"⚪"}, {n:"ورق طباعة", i:"📄"},
-            {n:"تجهيز أوردر", i:"📝"}, {n:"حساب مبيعات", i:"💰"}, {n:"تقرير يومي", i:"📅"}, {n:"دعم فني", i:"📞"},
-            {n:"خبير صيني", i:"🏮"}, {n:"خبير هندي", i:"👳"}
+        const KEY = "AIzaSyDSEanlwCKhNGvp4zwGksuk5Vgr_qMZ0TM";
+        const cats = [
+            {n:"بولسار 180", i:"🏍️"}, {n:"بوكسر 150", i:"⚙️"}, {n:"كهرباء هندي", i:"⚡"}, {n:"موتوسيكل صيني", i:"🧧"},
+            {n:"هايدلبيرج 70*100", i:"📠"}, {n:"أوفست ألماني", i:"🇩🇪"}, {n:"خبايا الطباعة", i:"🎨"}, {n:"كهرباء مكن", i:"🔌"},
+            {n:"غسالة أوتوماتيك", i:"🧺"}, {n:"سخان غاز", i:"🔥"}, {n:"ثلاجة نوفروست", i:"❄️"}, {n:"تكييف", i:"🌬️"},
+            {n:"سيستم POS", i:"📊"}, {n:"إدارة مخازن", i:"📦"}, {n:"باركود", i:"🏷️"}, {n:"ميزان", i:"⚖️"},
+            {n:"دبرياج", i:"⛓️"}, {n:"كربراتير", i:"⛽"}, {n:"بوجيهات", i:"🕯️"}, {n:"تغيير زيت", i:"🛢️"},
+            {n:"فرامل", i:"🛑"}, {n:"مساعدين", i:"🪜"}, {n:"بطارية", i:"🔋"}, {n:"مارش", i:"🔑"},
+            {n:"خلاط", i:"🌪️"}, {n:"مكواة", i:"💨"}, {n:"ميكروويف", i:"🍱"}, {n:"مكنة حلاقة", i:"✂️"},
+            {n:"شاشة LED", i:"📺"}, {n:"راوتر", i:"🌐"}, {n:"مكنة تصوير", i:"🖨️"}, {n:"كمبروسر", i:"💨"},
+            {n:"مروحة", i:"🌀"}, {n:"شفاط", i:"🏠"}, {n:"طلمبة مياه", i:"💧"}, {n:"مكنة خياطة", i:"🧵"},
+            {n:"طابعة ليزر", i:"🖨️"}, {n:"حبارة ألوان", i:"🌈"}, {n:"درام المكنة", i:"⚪"}, {n:"تجهيز أوردر", i:"📝"},
+            {n:"حسابات مبيعات", i:"💰"}, {n:"تقارير", i:"📅"}, {n:"صيانة وقائية", i:"🛡️"}, {n:"عدة مطلوبة", i:"🔧"},
+            {n:"حلول سريعة", i:"💡"}, {n:"فيديو شرح", i:"🎥"}, {n:"خبير صيني", i:"🏮"}, {n:"خبير هندي", i:"👳"},
+            {n:"برمجة", i:"💻"}, {n:"Google Cloud", i:"☁️"}
         ];
 
-        const grid = document.getElementById('grid50');
-        categories.forEach(c => {
-            const div = document.createElement('div');
-            div.className = 'grid-item';
-            div.innerHTML = `<span class="icon">${c.i}</span><span class="label">${c.n}</span>`;
-            div.onclick = () => { document.getElementById('textInput').value = `عطل في ${c.n}: `; askMasterAI(); };
-            grid.appendChild(div);
+        const g = document.getElementById('masterGrid');
+        cats.forEach(c => {
+            const d = document.createElement('div');
+            d.className = 'grid-item';
+            d.innerHTML = `<span>${c.i}</span><small>${c.n}</small>`;
+            d.onclick = () => { document.getElementById('userInput').value = `عندي عطل في ${c.n}: `; askExpert(); };
+            g.appendChild(d);
         });
 
-        async function askMasterAI() {
-            const input = document.getElementById('textInput').value;
-            const resDiv = document.getElementById('aiResponse');
-            resDiv.style.display = "block";
-            resDiv.innerText = "الأسطى بيفحص العطل لايف من المصادر... ⏳";
+        async function askExpert() {
+            const q = document.getElementById('userInput').value;
+            const out = document.getElementById('ai-output');
+            out.style.display = "block";
+            out.innerText = "الأسطى بيفكر... ثواني يا هندسة ⏳";
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `أنت أسطى خبير وشاطر جداً اسمك AJ Lab. تخصصك: ميكانيكا موتوسيكلات (هندي وصيني)، مكن طباعة هايدلبيرج، أجهزة منزلية، وسيستم POS. رد بلهجة مصرية عامية فنية ومختصرة جداً. حلل العطل ده: ${input}. اذكر: 1- السبب المرجح. 2- العدة المطلوبة بالظبط. 3- خطوة الإصلاح الفني "الفابريكا".` }] }]
+                        contents: [{ parts: [{ text: `أنت أسطى خبير في ميكانيكا الموتوسيكلات، مكن الطباعة هايدلبيرج، الأجهزة المنزلية، والـ POS. اسمك AJ Lab. رد بلهجة مصرية عامية فنية ومختصرة جداً في شكل نقاط. العطل: ${q}. اذكر السبب، العدة، وخطوة الإصلاح الفابريكا.` }] }]
                     })
                 });
-                const data = await response.json();
-                const aiText = data.candidates[0].content.parts[0].text;
-                resDiv.innerHTML = `<strong>الخلاصة من الأسطى:</strong><br>${aiText}`;
-                speak(aiText);
-            } catch (e) { resDiv.innerText = "في مشكلة في الربط يا هندسة، اتأكد من المفتاح والنت."; }
+                const d = await r.json();
+                const txt = d.candidates[0].content.parts[0].text;
+                out.innerHTML = `<strong>الخلاصة من AJ Lab:</strong><br>${txt}`;
+                const s = new SpeechSynthesisUtterance(txt); s.lang = 'ar-EG'; window.speechSynthesis.speak(s);
+            } catch (e) { out.innerText = "في مشكلة في الربط، تأكد من النت يا بطل."; }
         }
 
-        function speak(text) {
-            const msg = new SpeechSynthesisUtterance(text);
-            msg.lang = 'ar-EG';
-            window.speechSynthesis.speak(msg);
+        function startCam() {
+            const v = document.getElementById('video-feed');
+            v.style.display = "block";
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(s => v.srcObject = s);
         }
 
-        function startCamera() {
-            const vidBox = document.getElementById('vidBox');
-            vidBox.style.display = "block";
-            navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-                document.getElementById('video').srcObject = stream;
-            });
-        }
-
-        function startVoice() {
-            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = 'ar-EG';
-            recognition.onresult = (e) => { document.getElementById('textInput').value = e.results[0][0].transcript; askMasterAI(); };
-            recognition.start();
+        function startMic() {
+            const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            rec.lang = 'ar-EG';
+            rec.onresult = (e) => { document.getElementById('userInput').value = e.results[0][0].transcript; askExpert(); };
+            rec.start();
         }
     </script>
 </body>
