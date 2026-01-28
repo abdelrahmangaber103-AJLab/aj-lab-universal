@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJ Lab Universal | قريباً</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00ffcc; /* اللون اللبني المضيء */
+            --secondary-color: #58a6ff; /* لون أزرق فاتح للتفاصيل */
+            --bg-color: #0d1117; /* خلفية داكنة */
+            --text-color: #ffffff; /* لون النص الأبيض */
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Cairo', sans-serif; /* الفونت الأساسي للنصوص */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            border: 2px solid rgba(0, 255, 204, 0.3);
+            padding: 50px 40px;
+            border-radius: 25px;
+            /* تظليل ناعم حول البوكس */
+            box-shadow: 0 10px 30px rgba(0, 255, 204, 0.1);
+            max-width: 90%;
+            background: rgba(13, 17, 23, 0.8); /* خلفية نصف شفافة للبوكس */
+            backdrop-filter: blur(10px); /* تأثير ضبابي خلف البوكس */
+        }
+
+        /* --- تنسيق اللوجو الجديد --- */
+        .logo-container {
+            margin-bottom: 30px;
+            /* استخدام فونت بابل احترافي للوجو فقط */
+            font-family: 'Nunito', sans-serif;
+        }
+        .logo-main {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            /* تأثير توهج (Glow) احترافي */
+            text-shadow: 0 0 15px rgba(0, 255, 204, 0.6);
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+        .logo-sub {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            margin-top: -5px;
+            /* تدرج لوني بسيط للكلمة الثانية */
+            background: linear-gradient(to right, #ffffff, var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* --------------------------- */
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #8b949e;
+            margin: 15px 0;
+        }
+        .status {
+            display: inline-block;
+            background: rgba(0, 255, 204, 0.15);
+            color: var(--primary-color);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-top: 25px;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo-container">
+            <div class="logo-main">AJ Lab</div>
+            <div class="logo-sub">Universal</div>
+        </div>
+        <p>مرحباً بك في المعمل المتكامل لابتكار وتطوير تطبيقات الويب.</p>
+        <p>إحنا شغالين دلوقتي على النسخة النهائية عشان نسهل التكنولوجيا لكل الناس.</p>
+        
+        <div class="status">🏗️ جاري التطوير الآن...</div>
+        
+        <div class="footer">
+            بواسطة عبدالرحمن جابر - فني طباعة ومبرمج حلول ذكية
+        </div>
+    </div>
+
+</body>
+</html>
