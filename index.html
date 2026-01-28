@@ -2,109 +2,130 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJ Lab Universal | قريباً</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AJ Lab Universal Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Nunito:wght@900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #00ffcc; /* اللون اللبني المضيء */
-            --secondary-color: #58a6ff; /* لون أزرق فاتح للتفاصيل */
-            --bg-color: #0d1117; /* خلفية داكنة */
-            --text-color: #ffffff; /* لون النص الأبيض */
-        }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Cairo', sans-serif; /* الفونت الأساسي للنصوص */
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .container {
-            text-align: center;
-            border: 2px solid rgba(0, 255, 204, 0.3);
-            padding: 50px 40px;
-            border-radius: 25px;
-            /* تظليل ناعم حول البوكس */
-            box-shadow: 0 10px 30px rgba(0, 255, 204, 0.1);
-            max-width: 90%;
-            background: rgba(13, 17, 23, 0.8); /* خلفية نصف شفافة للبوكس */
-            backdrop-filter: blur(10px); /* تأثير ضبابي خلف البوكس */
-        }
+        :root { --primary: #00ffcc; --bg: #f8f9fa; --dark-card: #1c2128; --text: #333; }
+        body { background-color: var(--bg); font-family: 'Cairo', sans-serif; margin: 0; padding: 0; color: var(--text); }
+        .header { background: linear-gradient(135deg, #1a1a1a, #333); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .logo { font-family: 'Nunito', sans-serif; font-size: 2.2rem; color: var(--primary); margin: 0; }
+        
+        /* بانر التشخيص الذكي - فيديو وصوت لايف */
+        .ai-banner { background: white; margin: 15px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 15px; border: 2px solid var(--primary); }
+        .live-status { background: #e0fbf6; color: #00a884; padding: 5px 15px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; align-self: flex-start; }
+        .video-container { width: 100%; height: 200px; background: #000; border-radius: 15px; overflow: hidden; display: none; position: relative; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* شبكة الأقسام (50 زرار فني) */
+        .section-title { padding: 0 20px; font-weight: bold; color: #666; font-size: 0.9rem; }
+        .main-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 15px; }
+        .grid-item { background: white; border-radius: 15px; padding: 15px 5px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); cursor: pointer; transition: 0.2s; border: 1px solid #eee; }
+        .grid-item:active { transform: scale(0.9); background: #f0f0f0; }
+        .grid-item .icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+        .grid-item .label { font-size: 0.7rem; font-weight: bold; line-height: 1.2; display: block; }
 
-        /* --- تنسيق اللوجو الجديد --- */
-        .logo-container {
-            margin-bottom: 30px;
-            /* استخدام فونت بابل احترافي للوجو فقط */
-            font-family: 'Nunito', sans-serif;
-        }
-        .logo-main {
-            font-size: 4rem;
-            font-weight: 900;
-            color: var(--primary-color);
-            /* تأثير توهج (Glow) احترافي */
-            text-shadow: 0 0 15px rgba(0, 255, 204, 0.6);
-            line-height: 1;
-            letter-spacing: -2px;
-        }
-        .logo-sub {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--text-color);
-            text-transform: uppercase;
-            letter-spacing: 6px;
-            margin-top: -5px;
-            /* تدرج لوني بسيط للكلمة الثانية */
-            background: linear-gradient(to right, #ffffff, var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        /* --------------------------- */
-
-        p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #8b949e;
-            margin: 15px 0;
-        }
-        .status {
-            display: inline-block;
-            background: rgba(0, 255, 204, 0.15);
-            color: var(--primary-color);
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            margin-top: 25px;
-            border: 1px solid var(--primary-color);
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
-        }
-        .footer {
-            margin-top: 40px;
-            font-size: 0.9rem;
-            color: var(--secondary-color);
-            opacity: 0.8;
-        }
+        /* منطقة الردود */
+        #aiResponse { margin: 15px; padding: 15px; background: var(--dark-card); color: white; border-radius: 15px; display: none; border-right: 5px solid var(--primary); font-size: 0.9rem; }
+        
+        .controls { display: flex; justify-content: space-around; padding: 10px; }
+        .btn-action { padding: 12px 25px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
+        .btn-ai { background: var(--primary); color: #1a1a1a; width: 80%; margin: 0 auto; display: block; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="logo-container">
-            <div class="logo-main">AJ Lab</div>
-            <div class="logo-sub">Universal</div>
-        </div>
-        <p>مرحباً بك في المعمل المتكامل لابتكار وتطوير تطبيقات الويب.</p>
-        <p>إحنا شغالين دلوقتي على النسخة النهائية عشان نسهل التكنولوجيا لكل الناس.</p>
-        
-        <div class="status">🏗️ جاري التطوير الآن...</div>
-        
-        <div class="footer">
-            بواسطة عبدالرحمن جابر - فني طباعة ومبرمج حلول ذكية
+    <div class="header">
+        <h1 class="logo">AJ Lab Universal Pro</h1>
+        <p style="font-size: 0.8rem; margin-top: 5px;">النسخة الفابريكا | أسطى كل الصنعات</p>
+    </div>
+
+    <div class="ai-banner">
+        <div class="live-status">● متصل بالذكاء الاصطناعي لايف</div>
+        <div class="video-container" id="vidBox"><video id="video" autoplay muted></video></div>
+        <textarea id="textInput" placeholder="اكتب العطل أو اضغط ميكروفون.." style="width: 100%; border: none; outline: none; font-family: 'Cairo';"></textarea>
+        <button class="btn-action btn-ai" onclick="askMasterAI()">بدء التشخيص الذكي</button>
+        <div class="controls">
+            <button onclick="startCamera()" title="فيديو">📷</button>
+            <button onclick="startVoice()" title="صوت">🎤</button>
+            <button onclick="document.getElementById('fileInput').click()" title="صورة">🖼️</button>
+            <input type="file" id="fileInput" style="display:none" onchange="handleImage(this)">
         </div>
     </div>
 
+    <div id="aiResponse"></div>
+
+    <p class="section-title">أقسام الصيانة والإصلاح</p>
+    <div class="main-grid" id="grid50"></div>
+
+    <script>
+        const API_KEY = "AIzaSyDSEanlwCKhNGvp4zwGksuk5Vgr_qMZ0TM";
+        const categories = [
+            {n:"موتور بولسار", i:"🏍️"}, {n:"بوكسر 150", i:"⚙️"}, {n:"كهرباء صيني", i:"⚡"}, {n:"تيل فرامل", i:"🛑"},
+            {n:"مكنة هايدلبيرج", i:"📠"}, {n:"خبايا الأوفست", i:"🎨"}, {n:"كهرباء المكن", i:"🔌"}, {n:"ميكانيكا الطباعة", i:"🛠️"},
+            {n:"غسالة توشيبا", i:"🧺"}, {n:"سخان غاز", i:"🔥"}, {n:"ثلاجة نوفروست", i:"❄️"}, {n:"تكييف سبليت", i:"🌬️"},
+            {n:"سيستم POS", i:"📊"}, {n:"إدارة مخازن", i:"📦"}, {n:"قارئ باركود", i:"🏷️"}, {n:"ميزان ذكي", i:"⚖️"},
+            {n:"تجهيز صيانة", i:"🧰"}, {n:"عدة مطلوبة", i:"🔧"}, {n:"حلول سريعة", i:"💡"}, {n:"فيديو شرح", i:"🎥"},
+            {n:"دبرياج هندي", i:"⛓️"}, {n:"كربراتير", i:"⛽"}, {n:"عمرة موتور", i:"🔩"}, {n:"تغيير زيت", i:"🛢️"},
+            {n:"غسالة أطباق", i:"🍽️"}, {n:"مكواة بخار", i:"💨"}, {n:"خلاط فريش", i:"🌪️"}, {n:"ميكروويف", i:"🍱"},
+            {n:"مكنة حلاقة", i:"✂️"}, {n:"راوتر نت", i:"🌐"}, {n:"شاشة LED", i:"📺"}, {n:"ريسيفر", i:"📡"},
+            {n:"كمبروسر", i:"💨"}, {n:"مروحة سقف", i:"🌀"}, {n:"شفاط مطبخ", i:"🏠"}, {n:"مكنة خياطة", i:"🧵"},
+            {n:"طلمبة مياه", i:"💧"}, {n:"بطارية موتوسيكل", i:"🔋"}, {n:"بوجيهات", i:"🕯️"}, {n:"مساعدين", i:"🪜"},
+            {n:"طابعة ليزر", i:"🖨️"}, {n:"حبارة ألوان", i:"🌈"}, {n:"درام المكنة", i:"⚪"}, {n:"ورق طباعة", i:"📄"},
+            {n:"تجهيز أوردر", i:"📝"}, {n:"حساب مبيعات", i:"💰"}, {n:"تقرير يومي", i:"📅"}, {n:"دعم فني", i:"📞"},
+            {n:"خبير صيني", i:"🏮"}, {n:"خبير هندي", i:"👳"}
+        ];
+
+        const grid = document.getElementById('grid50');
+        categories.forEach(c => {
+            const div = document.createElement('div');
+            div.className = 'grid-item';
+            div.innerHTML = `<span class="icon">${c.i}</span><span class="label">${c.n}</span>`;
+            div.onclick = () => { document.getElementById('textInput').value = `عطل في ${c.n}: `; askMasterAI(); };
+            grid.appendChild(div);
+        });
+
+        async function askMasterAI() {
+            const input = document.getElementById('textInput').value;
+            const resDiv = document.getElementById('aiResponse');
+            resDiv.style.display = "block";
+            resDiv.innerText = "الأسطى بيفحص العطل لايف من المصادر... ⏳";
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `أنت أسطى خبير وشاطر جداً اسمك AJ Lab. تخصصك: ميكانيكا موتوسيكلات (هندي وصيني)، مكن طباعة هايدلبيرج، أجهزة منزلية، وسيستم POS. رد بلهجة مصرية عامية فنية ومختصرة جداً. حلل العطل ده: ${input}. اذكر: 1- السبب المرجح. 2- العدة المطلوبة بالظبط. 3- خطوة الإصلاح الفني "الفابريكا".` }] }]
+                    })
+                });
+                const data = await response.json();
+                const aiText = data.candidates[0].content.parts[0].text;
+                resDiv.innerHTML = `<strong>الخلاصة من الأسطى:</strong><br>${aiText}`;
+                speak(aiText);
+            } catch (e) { resDiv.innerText = "في مشكلة في الربط يا هندسة، اتأكد من المفتاح والنت."; }
+        }
+
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'ar-EG';
+            window.speechSynthesis.speak(msg);
+        }
+
+        function startCamera() {
+            const vidBox = document.getElementById('vidBox');
+            vidBox.style.display = "block";
+            navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+                document.getElementById('video').srcObject = stream;
+            });
+        }
+
+        function startVoice() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'ar-EG';
+            recognition.onresult = (e) => { document.getElementById('textInput').value = e.results[0][0].transcript; askMasterAI(); };
+            recognition.start();
+        }
+    </script>
 </body>
 </html>
