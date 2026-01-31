@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJ-LAB-UNIVERSAL | ورشة الذكاء الاصطناعي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap'); /* خط عربي أفضل */
+        body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: white; line-height: 1.6; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-tech { 
+            transition: all 0.3s ease; 
+            border-bottom: 4px solid #1e40af; /* لون أزرق غامق للزر */
+            background-color: #2563eb; /* أزرق أساسي */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px; /* ارتفاع ثابت للزر */
+        }
+        .btn-tech:hover { background-color: #3b82f6; transform: translateY(-2px); box-shadow: 0 6px 10px rgba(0,0,0,0.2); }
+        .btn-tech:active { transform: translateY(2px); border-bottom-width: 2px; }
+        .dropdown-menu { 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out; 
+            opacity: 0;
+        }
+        .dropdown-menu.open { 
+            max-height: 300px; /* يكفي لعرض القائمة */
+            opacity: 1;
+        }
+        .ai-message { 
+            background-color: #1a202c; 
+            border-radius: 0.75rem; 
+            padding: 0.75rem 1rem; 
+            margin-bottom: 0.5rem; 
+            animation: fadeIn 0.5s ease-out;
+            text-align: right;
+        }
+        .user-message { 
+            background-color: #2b3547; 
+            border-radius: 0.75rem; 
+            padding: 0.75rem 1rem; 
+            margin-bottom: 0.5rem; 
+            animation: fadeIn 0.5s ease-out;
+            text-align: left;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .loading-dots span {
+            animation: blink 1.4s infinite ease-in-out both;
+        }
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex flex-col min-h-screen">
+
+    <header class="text-center mb-10">
+        <h1 class="text-4xl md:text-5xl font-bold text-blue-400 mb-2">AJ-LAB UNIVERSAL</h1>
+        <p class="text-gray-400 text-lg">خبايا الصنعة بالذكاء الاصطناعي.. الأسطى في جيبك</p>
+    </header>
+
+    <main class="flex-grow container mx-auto max-w-4xl">
+        <div class="glass rounded-2xl p-6 mb-8 text-right">
+            <h2 class="text-2xl mb-4 text-blue-300 font-semibold">أهلاً بيك يا فنان.. اختار الجهاز اللي فيه المشكلة:</h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="relative group">
+                    <button id="wash-btn" onclick="toggleDropdown('wash-drop')" class="btn-tech w-full rounded-xl bg-blue-600 hover:bg-blue-700">
+                        <i class="fas fa-soap text-3xl mb-2"></i>
+                        <span>الغسالات</span>
+                    </button>
+                    <div id="wash-drop" class="dropdown-menu absolute z-10 w-full mt-2 bg-slate-800 rounded-lg shadow-xl text-sm">
+                        <button class="w-full text-right p-3 hover:bg-slate-700 border-b border-slate-700" data-fault="الغسالة مش بتطرد المية">الغسالة مش بتطرد المية</button>
+                        <button class="w-full text-right p-3 hover:bg-slate-700 border-b border-slate-700" data-fault="الغسالة بتعمل صوت عالي في العصر">صوت عالي في العصر</button>
+                        <button class="w-full text-right p-3 hover:bg-slate-700" data-fault="الغسالة مش بتسحب مية">الغسالة مش بتسحب مية</button>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <button id="ref-btn" onclick="toggleDropdown('ref-drop')" class="btn-tech w-full rounded-xl bg-cyan-600 hover:bg-cyan-700">
+                        <i class="fas fa-snowflake text-3xl mb-2"></i>
+                        <span>الثلاجات</span>
+                    </button>
+                    <div id="ref-drop" class="dropdown-menu absolute z-10 w-full mt-2 bg-slate-800 rounded-lg shadow-xl text-sm">
+                        <button class="w-full text-right p-3 hover:bg-slate-700 border-b border-slate-700" data-fault="الثلاجة مش بتبرد كويس">مش بتبرد كويس</button>
+                        <button class="w-full text-right p-3 hover:bg-slate-700 border-b border-slate-700" data-fault="الثلاجة بتعمل ثلج كتير في الفريزر">ثلج كتير في الفريزر</button>
+                        <button class="w-full text-right p-3 hover:bg-slate-700" data-fault="الثلاجة بتنزل مية">بتنزل مية</button>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <button id="cook-btn" onclick="toggleDropdown('cook-drop')" class="btn-tech w-full rounded-xl bg-orange-600 hover:bg-orange-700">
+                        <i class="fas fa-fire text-3xl mb-2"></i>
+                        <span>البوتاجازات</span>
+                    </button>
+                    <div id="cook-drop" class="dropdown-menu absolute z-10 w-full mt-2 bg-slate-800 rounded-lg shadow-xl text-sm">
+                        <button class="w-full text-right p-3 hover:bg-slate-700 border-b border-slate-700" data-fault="عيون البوتاجاز مسدودة">عيون مسدودة</button>
+                        <button class="w-full text-right p-3 hover:bg-slate-700 border-b border-slate-700" data-fault="باب الفرن مش بيقفل كويس">باب الفرن مش بيقفل</button>
+                        <button class="w-full text-right p-3 hover:bg-slate-700" data-fault="شعلة الفرن ضعيفة">شعلة الفرن ضعيفة</button>
+                    </div>
+                </div>
+                
+                <div class="relative group">
+                    <button id="heater-btn" onclick="toggleDropdown('heater-drop')" class="btn-tech w-full rounded-xl bg-red-600 hover:bg-red-700">
+                        <i class="fas fa-water text-3xl mb-2"></i>
+                        <span>السخانات</span>
+                    </button>
+                    <div id="heater-drop" class="dropdown-menu absolute z-10 w-full mt-2 bg-slate-800 rounded-lg shadow-xl text-sm">
+                        <button class="w-full text-right p-3 hover:bg-slate-700 border-b border-slate-700" data-fault="المياه السخنة ضعيفة">مياه سخنة ضعيفة</button>
+                        <button class="w-full text-right p-3 hover:bg-slate-700 border-b border-slate-700" data-fault="السخان بيسرب مية">السخان بيسرب مية</button>
+                        <button class="w-full text-right p-3 hover:bg-slate-700" data-fault="السخان مش بيسخن خالص">مش بيسخن خالص</button>
+                    </div>
+                </div>
+
+                 <div class="relative group">
+                    <button id="ac-btn" onclick="toggleDropdown('ac-drop')" class="btn-tech w-full rounded-xl bg-purple-600 hover:bg-purple-700">
+                        <i class="fas fa-wind text-3xl mb-2"></i>
+                        <span>التكييفات</span>
+                    </button>
+                    <div id="ac-drop" class="dropdown-menu absolute z-10 w-full mt-2 bg-slate-800 rounded-lg shadow-xl text-sm">
+                        <button class="w-full text-right p-3 hover:bg-slate-700 border-b border-slate-700" data-fault="التكييف مش بيبرد">مش بيبرد</button>
+                        <button class="w-full text-right p-3 hover:bg-slate-700 border-b border-slate-700" data-fault="التكييف بيسرب مية">بيسرب مية</button>
+                        <button class="w-full text-right p-3 hover:bg-slate-700" data-fault="التكييف بيطلع ريحة وحشة">ريحة وحشة</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="glass rounded-2xl p-6 flex flex-col h-[50vh]">
+            <div class="flex items-center justify-between mb-4">
+                <span class="flex h-3 w-3 rounded-full bg-green-500"></span>
+                <h3 class="text-xl font-bold text-blue-300">الأسطى "جيمي" معاك لايف</h3>
+            </div>
+            
+            <div class="flex-grow bg-black/30 rounded-lg p-4 mb-4 overflow-y-auto custom-scrollbar" id="chat-box">
+                <div class="ai-message">يا مساء الفل يا هندسة! اختار الجهاز أو اكتبلي العطل اللي ظاهر قدامك دلوقتي.. أنا جاهز عشان أقولك خبايا الصنعة.</div>
+                <div id="loading-indicator" class="ai-message hidden">
+                    جيمي بيفكر... <span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <input type="text" id="user-input" placeholder="اكتب العطل هنا (مثلاً: الثلاجة بتنزل مية)" 
+                       class="flex-1 bg-slate-700 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500 text-right text-white">
+                <button id="send-btn" class="bg-blue-500 px-6 rounded-lg hover:bg-blue-400 flex items-center justify-center">
+                    <i class="fas fa-paper-plane text-lg"></i>
+                </button>
+                <button id="voice-btn" class="bg-green-500 px-4 rounded-lg hover:bg-green-400 flex items-center justify-center">
+                    <i class="fas fa-microphone text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center text-gray-500 text-sm mt-8">
+        AJ-LAB UNIVERSAL &copy; 2026 - كل الحقوق محفوظة للأصطوات.
+    </footer>
+
+    <script>
+        // دالة لفتح وإغلاق القوائم المنسدلة
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const allDropdowns = document.querySelectorAll('.dropdown-menu');
+
+            allDropdowns.forEach(drop => {
+                if (drop.id !== id && drop.classList.contains('open')) {
+                    drop.classList.remove('open');
+                }
+            });
+
+            dropdown.classList.toggle('open');
+        }
+
+        // إخفاء القوائم المنسدلة عند الضغط خارجها
+        document.addEventListener('click', function(event) {
+            const dropdowns = document.querySelectorAll('.dropdown-menu');
+            dropdowns.forEach(dropdown => {
+                const button = document.getElementById(dropdown.id.replace('-drop', '-btn'));
+                if (dropdown.classList.contains('open') && !dropdown.contains(event.target) && !button.contains(event.target)) {
+                    dropdown.classList.remove('open');
+                }
+            });
+        });
+
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const voiceBtn = document.getElementById('voice-btn');
+        const loadingIndicator = document.getElementById('loading-indicator');
+
+        // وظيفة لإرسال الرسائل وتلقي الردود (هنا هيتم دمجها مع Gemini API)
+        async function sendMessage(message) {
+            if (!message.trim()) return;
+
+            // عرض رسالة المستخدم
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.classList.add('user-message');
+            userMsgDiv.textContent = message;
+            chatBox.appendChild(userMsgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            userInput.value = ''; // مسح الإدخال
+
+            loadingIndicator.classList.remove('hidden'); // إظهار مؤشر التحميل
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // هنا هيتم استدعاء Gemini API
+            // (في التطبيق الحقيقي، هتكون دي نقطة الاتصال مع الـ backend اللي بيستخدم Gemini)
+            const aiResponse = await getGeminiResponse(message); // دالة وهمية حالياً
+
+            loadingIndicator.classList.add('hidden'); // إخفاء مؤشر التحميل
+
+            // عرض رد الذكاء الاصطناعي
+            const aiMsgDiv = document.createElement('div');
+            aiMsgDiv.classList.add('ai-message');
+            aiMsgDiv.innerHTML = aiResponse; // ممكن يكون فيه HTML لو عاوز تنسيق
+            chatBox.appendChild(aiMsgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // دالة وهمية لتمثيل رد Gemini
+        // في الواقع، دي اللي هتتكلم مع Gemini API عن طريق backend
+        async function getGeminiResponse(userQuery) {
+            return new Promise(resolve => {
+                setTimeout(() => { // محاكاة وقت استجابة الـ AI
+                    let response = "تمام يا هندسة، فهمت قصدك. لسه بنجهز الإجابة الدقيقة وهنقولك العدة المطلوبة كمان.";
+                    
+                    if (userQuery.includes("الغسالة مش بتطرد المية")) {
+                        response = `
+                            أفندم يا أسطى، عطل طلمبة الطرد ده غالبًا بيبقى مشكلة في الطلمبة نفسها أو في الفلتر بتاعها.
+                            <br><br>
+                            **خبايا الصنعة:** قبل ما تفك أي حاجة، تأكد إن الفلتر نضيف، ممكن يكون فيه "وبر" أو "عملة معدنية" سادة السكة. لو لسه مش بتطرد، يبقى الطلمبة عايزة تتغير.
+                            <br><br>
+                            **شنطة العدة:**
+                            <ul>
+                                <li>- مفك صليبة</li>
+                                <li>- بنسة</li>
+                                <li>- طبق أو إناء للمياه المتسربة</li>
+                                <li>- طلمبة طرد جديدة (لو هتركبها)</li>
+                            </ul>
+                            ولو احتاجت مساعدة، أنا موجود!
+                        `;
+                    } else if (userQuery.includes("الثلاجة مش بتبرد كويس")) {
+                        response = `
+                            يا فنان الثلاجة مش بتبرد كويس دي ليها كذا سبب، ممكن يكون الفريون ناقص أو الموتور تعبان أو باب الثلاجة مش بيقفل حلو.
+                            <br><br>
+                            **خبايا الصنعة:** بص على كاوتش الباب الأول، ممكن يكون فيه تسريب هوا. ولو سمعت صوت الموتور شغال على الفاضي، يبقى الفريون احتمال يكون ناقص.
+                            <br><br>
+                            **شنطة العدة:**
+                            <ul>
+                                <li>- مفك عادة</li>
+                                <li>- كشاف</li>
+                                <li>- فرشاة تنضيف (لتنضيف الكويل الخلفي)</li>
+                            </ul>
+                            لو المشكلة كبيرة، يبقى لازم فني متخصص.
+                        `;
+                    } else if (userQuery.includes("السلام عليكم")) {
+                        response = "وعليكم السلام يا هندسة! أؤمرني، أنا معاك.";
+                    } else {
+                         // رد عام من AI بلغة عامية مصرية
+                         const generalResponses = [
+                            "تمام يا معلم، سجلت العطل ده عندي، ثواني وهجبلك الخلاصة.",
+                            "يا باشا، أنا فاهمك، سيبلي العطل ده وهديك الحل الصح والعدة المطلوبة.",
+                            "عينيا يا هندسة! العطل ده ليه حلول كتير، هقولك أبسطها وأسرعها.",
+                            "متقلقش، أنا جاهز لأي عطل. دلوقتي هتجيلك الإجابة الواضحة والمفيدة."
+                        ];
+                        response = generalResponses[Math.floor(Math.random() * generalResponses.length)];
+                    }
+                    resolve(response);
+                }, 1500); // 1.5 ثانية انتظار
+            });
+        }
+
+        // حدث إرسال الرسالة عند الضغط على زر الإرسال
+        sendBtn.addEventListener('click', () => {
+            sendMessage(userInput.value);
+        });
+
+        // حدث إرسال الرسالة عند الضغط على Enter في حقل الإدخال
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage(userInput.value);
+            }
+        });
+
+        // حدث عند اختيار عطل جاهز من القوائم المنسدلة
+        document.querySelectorAll('.dropdown-menu button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const fault = e.target.dataset.fault;
+                if (fault) {
+                    sendMessage(fault);
+                    // إغلاق القائمة بعد الاختيار
+                    const parentDropdown = e.target.closest('.dropdown-menu');
+                    if (parentDropdown) parentDropdown.classList.remove('open');
+                }
+            });
+        });
+
+        // وظيفة التفاعل الصوتي (هنا هتحتاج تدمجها مع Web Speech API و Gemini)
+        voiceBtn.addEventListener('click', () => {
+            alert('خاصية التفاعل الصوتي (Voice Interaction) لسه بنربطها بالأسطى جيمي لايف! هتبقى جاهزة قريب جداً.');
+            // هنا هيتم تفعيل Web Speech API للاستماع للمستخدم
+            // وبعدين إرسال النص لـ Gemini وتلقي الرد الصوتي
+        });
+
+    </script>
+</body>
+</html>
